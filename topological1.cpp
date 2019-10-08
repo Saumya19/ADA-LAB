@@ -1,64 +1,48 @@
-#include <bits/stdc++.h>
+#include<iostream>
 using namespace std;
-
-
-void topologicalSort(int** edges,int n, int* inDegree){
-
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
-            if (edges[i][j]){
-                inDegree[j]++;
-            }
+int task[20][20],n;
+void take_input(){
+    int p_t=0, t=0;
+    cout<<"enter no. of tasks \n";
+    cin>>n;
+    for(int i =0;i<n;i++){
+        for(int j=0;j<n;j++){
+            task[i][j]=0;
         }
     }
-    int count = 0;
-    bool printed[n];
-    memset(printed, false, sizeof(printed));
-
-    while(count != n){
-        for (int i = 0; i < n; i++){
-            if (inDegree[i] == 0 && printed[i] == false){
-                cout << i + 1 << " ";
-                printed[i] = true;
-                count++;
-                for (int j = 0; j < n; j++){
-                    if (edges[i][j]){
-                        inDegree[j]--;
-                        edges[i][j] = 0;
-                    }
-                }
-            }
+    while(t != -1 || p_t !=-1){
+        cout<<"enter edges and [-1 -1] to stop\n";
+        cin>>t>>p_t;
+        if(t!= -1 || p_t!=-1)
+            task[p_t][t]=1;
+        }}
+void topologicalOrder(){
+    int indegree[20],k,stack[20],top=-1;
+    for(int i=0;i<n;i++){
+        indegree[i]=0;
+        for(int j=0;j<n;j++){
+            indegree[i] +=task[j][i];
         }
     }
-
-    cout<< endl;
+    for(int i=0;i<n;i++){
+            if(indegree[i]==0){
+                stack[++top]=i;
+            }}
+    while(top!=-1 ){
+      k=stack[top--];
+      cout<<k<<"\t";
+      indegree[k]=-1;
+      for(int l=0;l<n;l++){
+       if(task[k][l]==1){
+       indegree[l] -=1;
+       if(indegree[l]== 0)
+       stack[++top]=l;
+     }
+            }}
+    cout<<endl;
 }
-
 int main(){
-    int n, m;
-    cout << "Enter the number of vertex : ";
-    cin >> n;
-    cout << "Enter the number of edges : ";
-    cin >> m;
-    int **edges = new int*[n];
-    for (int i = 0; i < n; i++){
-        edges[i] = new int[n];
-        for (int j = 0; j < n; j++){
-            edges[i][j] = 0;
-        }
-    }
-    cout << "Enter the vertices who has edges between them :" << endl;
-    for (int i = 0; i < m; i++){
-        int a, b;
-        cin >> a >> b;
-        edges[a-1][b-1] = 1;
-    }
-
-    int inDegree[n];
-    memset(inDegree, 0, sizeof(inDegree));
-   // for (int i  = 0; i < n; i++)
-
-    topologicalSort(edges, n, inDegree);
+    take_input();
+    topologicalOrder();
     return 0;
 }
-
