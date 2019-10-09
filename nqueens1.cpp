@@ -1,59 +1,74 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
-bool validPos(int** board, int row, int col, int n){
 
-    for (int i = row; i >= 0; i--){
-        if (board[i][col] == 1)
-            return false;
-    }
-    for (int i = row, j = col; i >= 0 && j >= 0; i--, j--){
-        if (board[i][j] == 1)
-            return false;
-    }
-    for (int i = row, j = col; i >= 0 && j < n; i--, j++){
-        if (board[i][j] == 1)
-            return false;
+int N;
+int board[100][100];
+
+int is_attack(int i,int j)
+{
+    int k,l;
+    for(k=0;k<N;k++)
+    {
+        if((board[i][k] == 1) || (board[k][j] == 1))
+            return 1;
     }
 
-    return true;
-}
-
-void nQueen(int** board, int n, int row){
-
-    if (row == n){
-        cout << "Queen Placement" << endl;
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                cout << board[i][j] <<" ";
+    for(k=0;k<N;k++)
+    {
+        for(l=0;l<N;l++)
+        {
+            if(((k+l) == (i+j)) || ((k-l) == (i-j)))
+            {
+                if(board[k][l] == 1)
+                    return 1;
             }
-            cout << endl;
-        }
-        cout << endl;
-        return;
-    }
-
-    for (int j = 0; j < n; j++){
-        if (validPos(board, row, j, n)){
-            board[row][j] = 1;
-            nQueen(board, n, row + 1);
-            board[row][j] = 0;
         }
     }
-    return;
+    return 0;
 }
 
-
-int main(){
-    int n;
-    cout << "Enter the number of queens : ";
-    cin >> n;
-    int** board = new int* [n];
-    for (int i = 0; i < n; i++){
-        board[i] = new int[n];
-        for (int j = 0; j < n; j++)
-            board[i][j] = 0;
+int N_queen(int n)
+{
+    int i,j;
+    //if n is 0, solution found
+    if(n==0)
+        return 1;
+    for(i=0;i<N;i++)
+    {
+        for(j=0;j<N;j++)
+        {
+            if((!is_attack(i,j)) && (board[i][j]!=1))
+            {
+                board[i][j] = 1;
+                if(N_queen(n-1)==1)
+                {
+                    return 1;
+                }
+                board[i][j] = 0;
+            }
+        }
     }
-
-    nQueen(board, n, 0);
     return 0;
+}
+
+int main()
+{
+    cout<<"Enter the value of N for NxN chessboard\n";
+    cin>>N;
+
+    int i,j;
+    for(i=0;i<N;i++)
+    {
+        for(j=0;j<N;j++)
+        {
+            board[i][j]=0;
+        }
+    }
+    N_queen(N);
+    for(i=0;i<N;i++)
+    {
+        for(j=0;j<N;j++)
+            cout<<board[i][j];
+        cout<<endl;
+    }
 }
