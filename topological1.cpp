@@ -1,48 +1,47 @@
 #include<iostream>
+
 using namespace std;
-int task[20][20],n;
-void take_input(){
-    int p_t=0, t=0;
-    cout<<"enter no. of tasks \n";
-    cin>>n;
-    for(int i =0;i<n;i++){
-        for(int j=0;j<n;j++){
-            task[i][j]=0;
-        }
-    }
-    while(t != -1 || p_t !=-1){
-        cout<<"enter edges and [-1 -1] to stop\n";
-        cin>>t>>p_t;
-        if(t!= -1 || p_t!=-1)
-            task[p_t][t]=1;
-        }}
-void topologicalOrder(){
-    int indegree[20],k,stack[20],top=-1;
-    for(int i=0;i<n;i++){
-        indegree[i]=0;
-        for(int j=0;j<n;j++){
-            indegree[i] +=task[j][i];
-        }
-    }
-    for(int i=0;i<n;i++){
-            if(indegree[i]==0){
-                stack[++top]=i;
-            }}
-    while(top!=-1 ){
-      k=stack[top--];
-      cout<<k<<"\t";
-      indegree[k]=-1;
-      for(int l=0;l<n;l++){
-       if(task[k][l]==1){
-       indegree[l] -=1;
-       if(indegree[l]== 0)
-       stack[++top]=l;
-     }
-            }}
-    cout<<endl;
-}
+
 int main(){
-    take_input();
-    topologicalOrder();
+	int i,j,k,n,a[10][10],indeg[10],flag[10],count=0;
+
+	cout<<"Enter the no of vertices:\n";
+	cin>>n;
+
+	cout<<"Enter the adjacency matrix:\n";
+	for(i=0;i<n;i++){
+		cout<<"Enter row "<<i+1<<"\n";
+		for(j=0;j<n;j++)
+			cin>>a[i][j];
+	}
+
+	for(i=0;i<n;i++){
+        indeg[i]=0;
+        flag[i]=0;
+    }
+
+    for(i=0;i<n;i++)
+        for(j=0;j<n;j++)
+            indeg[i]=indeg[i]+a[j][i];
+
+    cout<<"\nThe topological order is:";
+
+    while(count<n){
+        for(k=0;k<n;k++){
+            if((indeg[k]==0) && (flag[k]==0)){
+                cout<<k+1<<" ";
+                flag[k]=1;
+            }
+
+            for(i=0;i<n;i++){
+                if(a[i][k]==1)
+                    indeg[k]--;
+            }
+        }
+
+        count++;
+    }
+
     return 0;
 }
+   
